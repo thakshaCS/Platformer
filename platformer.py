@@ -9,7 +9,7 @@ fps = 60
 
 
 screen_width = 1000
-screen_height = 1000 # make 500 to see the guy
+screen_height = 500 # make 500 to see the guy
 
 # creates a game window
 screen = pygame.display.set_mode((screen_width, screen_height),
@@ -55,6 +55,8 @@ class Player():
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
         self.vel_y = 0
         self.jumped = False
         self.direction = 0
@@ -114,11 +116,28 @@ class Player():
 
         # add gravity
         self.vel_y += 1
-
-
         dy += self.vel_y
 
         # check for collison
+        for tile in world.tile_list:
+
+            # check for collision of player
+            if tile[1].colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+
+                
+
+                # check if below the ground from jumping -> negative velocity
+                if self.vel_y < 0:
+                    dy = tile[1].bottom - self.rect.top
+                    self.vel_y = 0
+
+                # check if above ground -> falling
+                elif self.vel_y >= 0:
+                    dy = tile[1].top - self.rect.bottom
+                    self.vel_y = 0
+
+
+
 
         # update player coordinates
         self.rect.x += dx
