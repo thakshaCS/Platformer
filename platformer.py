@@ -88,6 +88,7 @@ class Player():
             self.counter += 1
             self.direction = 1
 
+        #animation of player walking
         if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
             self.counter = 0
             self.index = 0
@@ -112,19 +113,25 @@ class Player():
                 self.image = self.images_left[self.index]
 
 
-
-
         # add gravity
         self.vel_y += 1
         dy += self.vel_y
 
+
         # check for collison
         for tile in world.tile_list:
 
-            # check for collision of player
+
+            # check for collision of player in x direction
+            if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.width,
+                                   self.height):
+                dx = 0
+
+
+            # check for collision of player in y direction
             if tile[1].colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
 
-                
+
 
                 # check if below the ground from jumping -> negative velocity
                 if self.vel_y < 0:
@@ -135,7 +142,6 @@ class Player():
                 elif self.vel_y >= 0:
                     dy = tile[1].top - self.rect.bottom
                     self.vel_y = 0
-
 
 
 
